@@ -17,10 +17,10 @@ spec:
         app: node
     spec:
       containers:
-      - image:  shubhamshinde2025/node-cicd:
+      - image:  shubhamshinde2025/node-app:
         imagePullPolicy: Always
         name: node
         ports:
-        - containerPort: 4200
+        - containerPort: 5173
           name: http
           protocol: TCP
