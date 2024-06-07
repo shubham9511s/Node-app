@@ -21,7 +21,6 @@ pipeline {
                 script {
                   withDockerRegistry(credentialsId: 'docker-token', toolName: 'docker'){
                     sh 'docker build -t ${DOCKER_IMAGE} node-project/.'
-                    sh'trivy image --format table -o trivy-report.html ${DOCKER_IMAGE}'
                     def dockerImage = docker.image("${DOCKER_IMAGE}")
                     dockerImage.push()
                       
@@ -53,7 +52,6 @@ pipeline {
                             echo $imageTag
                             sed -i "s|${REPO_IMAGE_NAME}:${imageTag}|${REPO_IMAGE_NAME}:${BUILD_NUMBER}|" manifest/main.yml
                             git add manifest/main.yml
-                            git clean -fd
                             git commit -m "Update deployment Image to version \${BUILD_NUMBER}"
                             git push https://${TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
                         '''
