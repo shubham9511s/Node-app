@@ -26,7 +26,7 @@ function App() {
         </p>
       </div>
       <p className="read-the-docs">
-        This Code is Deploy on ARGO Cd throuth out Jenkins CI
+        This Code is Deploy on ARGO Cd throuth out Jenkins CI Code Check
       </p>
     </>
   )
