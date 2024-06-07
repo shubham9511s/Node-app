@@ -39,7 +39,7 @@ pipeline {
             environment {
                 GIT_REPO_NAME = "manifest-file"
                 GIT_USER_NAME = "shubham9511s"
-                REPO_IMAGE_NAME = "shubhamshinde2025/node-app"
+                REPO_IMAGE_NAME = "shubhamshinde2206/node-app"
             }
             steps {
                    withCredentials([string(credentialsId: 'github-token', variable: 'TOKEN')]) {
