@@ -16,5 +16,5 @@ COPY . .
 # Expose the port your app runs on
 EXPOSE 5173
 
-# Command to run your application
+# Command to run your application Main branch
 CMD ["npm", "run","dev"]
