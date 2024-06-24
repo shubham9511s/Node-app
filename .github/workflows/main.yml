@@ -1,29 +1,60 @@
-name: CI
+name: Node.js CI with Docker
 
 on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build:
+
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '20'
 
-      - name: Install dependencies
-        run: |
-          cd node-project
-          npm install
+    - name: Install dependencies
+      run: | 
+        cd node-project
+        npm install
 
-      - name: Run tests
-        run: |
-          cd node-project
-          npm test
+    - name: Run tests
+      run: | 
+        cd node-project 
+        npm test
+
+    - name: SonarQube Scan
+      uses: sonarsource/sonarcloud-github-action@main
+      env:
+        GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+        
+    - name: Build and push Docker image
+      env:
+        IMAGE_NAME: shubhamshinde2206/node-app
+        TAG: latest
+      run: |
+        cd node-project
+        docker build -t $IMAGE_NAME .
+        docker tag $IMAGE_NAME:$TAG $IMAGE_NAME:$TAG
+        docker push $IMAGE_NAME:$TAG
+
+    - name: Deploy to Docker
+      run: |
+        docker pull $IMAGE_NAME:$TAG
+        docker run -d -p 5173:5173 $IMAGE_NAME:$TAG
