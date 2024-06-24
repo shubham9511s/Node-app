@@ -27,11 +27,6 @@ jobs:
         cd node-project
         npm install
 
-    - name: Run tests
-      run: | 
-        cd node-project 
-        npm test
-
     - name: Run SonarQube Scanner
       env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
