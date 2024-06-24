@@ -44,16 +44,19 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
         
-    - name: Build and push Docker image
-      env:
-        IMAGE_NAME: shubhamshinde2206/node-app
-        TAG: 7
+    - name: Build Docker image
       run: |
         cd node-project
-        docker build -t $IMAGE_NAME .
-        docker tag $IMAGE_NAME:$TAG $IMAGE_NAME:$TAG
-        docker push $IMAGE_NAME:$TAG
+        docker build . -t ${{ secrets.DOCKERHUB_USERNAME }}/node-app:${{ github.sha }}
 
+    - name: Build Docker image
+      run: |
+        cd node-project
+        docker build . -t ${{ secrets.DOCKERHUB_USERNAME }}/node-app:${{ github.sha }}
+
+    - name: Push Docker image
+      run: docker push ${{ secrets.DOCKER_USERNAME }}/node-app:${{ github.sha }}
+    
     - name: Deploy to Docker
       run: |
-        docker run -d -p 5173:5173 shubhamshinde2206/node-app:7
+        docker run -d -p 5173:5173 ${{ secrets.DOCKER_USERNAME }}/node-app:${{ github.sha }}
