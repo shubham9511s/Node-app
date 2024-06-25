@@ -27,16 +27,16 @@ jobs:
         cd node-project
         npm install
 
-    - name: Run SonarQube Scanner
-      env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      run: |
-          npm install -g sonarqube-scanner
-          sonar-scanner \
-            -Dsonar.projectKey=Node-app \
-            -Dsonar.sources=. \
-            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }}    
+    #- name: Run SonarQube Scanner
+      #env:
+          #SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      #run: |
+          #npm install -g sonarqube-scanner
+          #sonar-scanner \
+            #-Dsonar.projectKey=Node-app \
+            #-Dsonar.sources=. \
+            #-Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
+            #-Dsonar.login=${{ secrets.SONAR_TOKEN }}    
 
     - name: Login to Docker Hub
       uses: docker/login-action@v2
@@ -54,3 +54,6 @@ jobs:
     
     - name: Deploy to Docker
       run: docker run -d -p 5173:5173 shubhamshinde2206/node-app:${{ github.sha }}
+      
+    - name: check docker  
+      run: docker ps
